@@ -1,0 +1,131 @@
+{% extends 'base.html' %} 
+{% block title %} Django Sending Mail {% endblock %}
+{% block css %}
+<style>
+  body {
+    padding: 20px;
+  }
+
+  .email-form {
+    max-width: 700px; /* Decreased the max-width to make the form smaller */
+    margin: 0 auto;
+  }
+
+  .form-floating input {
+    width: 100%; /* Adjusted the width to fill the container */
+    max-width: 100%; /* Added max-width to ensure the input doesn't overflow */
+  }
+
+  .cc-links {
+    margin-left: 620px;
+    margin-bottom: 5px;
+  }
+
+  .cc-links a {
+    color: black;
+    font-style: normal;
+  }
+
+  /* Added a CSS class to hide the ccEmail input initially */
+  .hidden {
+    display: none;
+  }
+</style>
+
+{% endblock %} 
+{% block body %}
+
+<div class="container">
+  <form
+    class="card shadow-lg p-3 email-form"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %}
+    <div class="head">
+      <h6>New Message</h6>
+    </div>
+    <div class="cc-links">
+      <!-- Added an onclick event to the "Cc" link to toggle visibility -->
+      <a href="#" onclick="toggleCcEmail()">Cc</a>
+    </div>
+
+    <div class="form-floating mb-2">
+      <input
+        type="email"
+        class="form-control"
+        name="toEmail"
+        id="toEmail"
+        placeholder="name@example.com"
+        required
+      />
+      <label for="toEmail">To</label>
+    </div>
+
+    <!-- Modified the ccEmail input field to include the "hidden" class -->
+    <div class="form-floating mb-2 hidden" id="ccEmailContainer">
+      <input
+        type="text"
+        class="form-control"
+        name="ccEmail"
+        id="ccEmail"
+        placeholder="name@example.com"
+      />
+      <label for="ccEmail">Cc</label>
+    </div>
+
+    <div class="form-floating mb-2">
+      <input
+        type="text"
+        class="form-control"
+        name="subject"
+        id="subject"
+        placeholder="Subject"
+        required
+      />
+      <label for="subject">Subject</label>
+    </div>
+
+    <div class="form-floating mb-2">
+      <textarea
+        class="form-control"
+        placeholder="Message"
+        id="message"
+        name="message"
+        style="height: 300px"
+        required
+      ></textarea>
+      <label for="message">Message</label>
+    </div>
+
+    <div class="form-group mb-2">
+      <label for="inputAttachments">Attachments:</label>
+      <input
+        type="file"
+        class="form-control-file"
+        id="inputAttachments"
+        name="attachment"
+        multiple
+      />
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Send</button>
+      <button type="button" class="btn btn-secondary">Discard</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function toggleCcEmail() {
+    var ccEmailContainer = document.getElementById("ccEmailContainer");
+
+    if (ccEmailContainer.classList.contains("hidden")) {
+      ccEmailContainer.classList.remove("hidden");
+    } else {
+      ccEmailContainer.classList.add("hidden");
+    }
+  }
+</script>
+
+{% endblock %}
